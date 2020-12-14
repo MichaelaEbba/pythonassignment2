@@ -1,61 +1,85 @@
 import view
-from todo import ToDo
-import time
-
-todo_list = []
-
-def time_to_formatted_string(time_format):
-    year = time_format[0]
-    month = time_format[1]
-    day = time_format[2]
-    hour = time_format[3]
-    my_min = time_format[4]
-
-    return f'{year}-{month}-{day} {hour}:{my_min}'
+import user_input
+import todo_controller
+import database
 
 
 def see_all_todos():
     view.see_all_todos()
-    for index in range(len(todo_list)):
-        todo = todo_list[index]
-        time_created = time_to_formatted_string(todo.time_created)
-
-        print(todo.description, time_created)
+    todo_controller.print_todos()
 
 
-def create_todo():
-    view.create_new_todo()
-    new_description = input('> ')
-    new_todo = ToDo(new_description, time.localtime())
-    todo_list.append(new_todo)
+def what_to_update(index):
+    index -= 1
+    while True:
+        view.update_description_or_set_done()
+        chosen = user_input.return_int()
+        if chosen == 1:
+            todo_controller.set_new_description(index)
+            break
+        elif chosen == 2:
+            todo_controller.set_todo_done(index)
+            break
+        elif chosen == 3:
+            todo_controller.set_todo_undone(index)
+            break
+        elif chosen == 0:
+            break
+        else:
+            view.invalid_input()
+
 
 def update_todos():
     view.update_todos()
+    todo_controller.print_todos()
+    view.choose_todo()
+
+    while True:
+        chosen_todo = user_input.return_int()
+        if 1 <= chosen_todo <= todo_controller.number_of_todos():
+            what_to_update(chosen_todo)
+            break
+        elif chosen_todo == 0:
+            break
+        else:
+            view.invalid_input()
 
 
 def delete_todos():
     view.delete_todos()
+    todo_controller.print_todos()
+    view.choose_todo_delete()
+
+    while True:
+        chosen_todo = user_input.return_int()
+        if 1 <= chosen_todo <= todo_controller.number_of_todos():
+            todo_controller.delete_specific_todo(chosen_todo)
+            break
+        elif chosen_todo == 0:
+            break
+        else:
+            view.invalid_input()
 
 
-def sub_menus(user_input):
-    if user_input in '1':
+def sub_menus(choice):
+    if choice in '1':
         see_all_todos()
-    elif user_input in '2':
-        create_todo()
-    elif user_input in '3':
+    elif choice in '2':
+        todo_controller.create_todo()
+    elif choice in '3':
         update_todos()
-    elif user_input in '4':
+    elif choice in '4':
         delete_todos()
     else:
         view.wrong_message()
 
 
 def menu_choice():
-    user_input = input('> ')
-    if user_input in '1234':
-        sub_menus(user_input)
+    choice = user_input.return_str()
+    if choice in '1234':
+        sub_menus(choice)
         return True
-    elif user_input in '5':
+    elif choice in '5':
         view.bye_message()
         return False
     else:
@@ -64,9 +88,9 @@ def menu_choice():
     return True
 
 
-todo_list.append(ToDo('To Do 1', time.localtime()))
-todo_list.append(ToDo('To Do 2', time.localtime()))
-todo_list.append(ToDo('To Do 3', time.localtime()))
+# todo_controller.developer_mode()
+todo_controller.read_from_database()
+
 run_program = True
 
 while run_program:
@@ -75,3 +99,4 @@ while run_program:
     run_program = menu_choice()
 
 
+todo_controller.save_to_database()

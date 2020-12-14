@@ -25,15 +25,13 @@
 - [x] Den skall köras i kommandotolken
 
 # ToDo App:
-- [] En applikation som tillåter en användare att läsa todo's.
-- [] Den skall inte försvinna när man stänger ner applikationen. 
-- [] En användare skall kunna använda den. 
+- [x] En applikation som tillåter en användare att läsa todo's.
+- [x] Den skall inte försvinna när man stänger ner applikationen. 
+- [x] En användare skall kunna använda den. 
 
 # Upplägg
-- [] Skapa ny todo
-- [] Uppdatera todo
-- [] Ta bort todo
-- [] När den skapas
-- [] När den tas bort
-- [] När den skall vara klar
-    
+- [x] Skapa ny todo
+- [x] Uppdatera todo
+- [x] Ta bort todo
+- [x] När den skapas
+- [x] När den tas bort
